@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "646345457097",
+    "project_id": "myvitals-c5cac",
+    "storage_bucket": "myvitals-c5cac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646345457097:android:916bad70ecca313c983c18",
+        "android_client_info": {
+          "package_name": "com.example.myvitals"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdwguMZdhKfNnWIjhY8x79TpI4-35kq2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
