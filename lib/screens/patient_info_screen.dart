@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myvitals/Components/my_buttons/my_button.dart';
 import 'package:myvitals/Components/my_textfields/my_numberfield.dart';
 import 'package:myvitals/screens/home.dart';
-
-import '../Utils/globals.dart';
 import '../models/person.dart';
 
 class PatientInfoScreen extends StatefulWidget {
@@ -46,7 +43,7 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => MyHomePage(user: widget.user,),
+          builder: (context) => const MyHomePage(),
         ),
       );
     }).catchError((error) {

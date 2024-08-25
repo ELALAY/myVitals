@@ -10,7 +10,6 @@ import '../../Components/my_buttons/my_button.dart';
 import '../../Components/my_textfields/my_emailfield.dart';
 import '../../Components/my_textfields/my_pwdfield.dart';
 import '../../Components/my_textfields/my_textfield.dart';
-import '../../Screens/home.dart';
 import '../../models/person.dart';
 import '../../screens/patient_info_screen.dart';
 import '../realtime_db/firebase_db.dart';

@@ -13,7 +13,7 @@ class AuthChecker extends StatelessWidget {
     if (user == null) {
       return const LoginOrRegister();
     } else {
-      return MyHomePage(user: user!);
+      return const MyHomePage();
     }
   }
 }

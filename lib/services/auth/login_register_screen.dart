@@ -33,12 +33,10 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
           emailController.text.trim(),
           passwordController.text.trim(),
         );
-
-        User? user = authService.getCurrentUser();
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyHomePage(user: user!)),
+          MaterialPageRoute(builder: (context) => const MyHomePage()),
         );
       } on FirebaseAuthException catch (e) {
         String errorMessage;
