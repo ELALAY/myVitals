@@ -1,16 +1,47 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Components/myvital_card.dart';
 
-import '../Components/mynavbar.dart';
+import '../services/auth/auth_service.dart';
+import '../services/auth/login_register_screen.dart';
+import '../services/realtime_db/firebase_db.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final User user;
+  const MyHomePage({super.key, required this.user});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  FirebaseDB fbdatabaseHelper = FirebaseDB();
+  AuthService authService = AuthService();
+
+  void logout() async {
+    try {
+      await authService.signOut();
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginOrRegister()),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Logout Error'),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('My Vitals'),
         backgroundColor: Colors.deepPurple,
         elevation: 0.0,
+        actions: [IconButton(onPressed: logout, icon: const Icon(Icons.logout_outlined))],
       ),
       body: const Column(
         crossAxisAlignment: CrossAxisAlignment.center,

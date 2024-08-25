@@ -12,6 +12,7 @@ import '../../Components/my_textfields/my_pwdfield.dart';
 import '../../Components/my_textfields/my_textfield.dart';
 import '../../Screens/home.dart';
 import '../../models/person.dart';
+import '../../screens/patient_info_screen.dart';
 import '../realtime_db/firebase_db.dart';
 import 'auth_service.dart';
 import 'login_register_screen.dart';
@@ -71,13 +72,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
           .doc(user!.uid)
           .set(personProfile.toMap());
 
+      // Navigate to the PatientInfoScreen
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const MyHomePage(),
+          builder: (context) => PatientInfoScreen(user: user!,),
         ),
       );
+
+      // ignore: use_build_context_synchronously
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const MyHomePage(),
+      //   ),
+      // );
     }
   }
 
@@ -214,13 +224,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ? CircleAvatar(
                         radius: 64,
                         backgroundImage: FileImage(_profileImage!),
-                        backgroundColor: Colors.deepPurple,
+                        backgroundColor: Colors.red,
                       )
                     : const CircleAvatar(
                         radius: 64,
                         backgroundImage: NetworkImage(
                             'https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png'),
-                        backgroundColor: Colors.deepPurple,
+                        backgroundColor: Colors.red,
                       ),
                 Positioned(
                   bottom: -15,
@@ -245,7 +255,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             MyTextField(
                 controller: usernameController,
                 label: 'Username',
-                color: Colors.deepPurple,
+                color: Colors.red,
                 enabled: true),
             const SizedBox(
               height: 10,
@@ -254,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             MyEmailField(
                 controller: emailController,
                 label: 'Email',
-                color: Colors.deepPurple,
+                color: Colors.red,
                 enabled: true),
             const SizedBox(
               height: 10,
@@ -262,7 +272,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             MyPwdField(
                 controller: passwordController,
                 label: 'Password',
-                color: Colors.deepPurple,
+                color: Colors.red,
                 enabled: true),
             const SizedBox(
               height: 10,
@@ -270,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             MyPwdField(
                 controller: confirmPasswordController,
                 label: 'Confirm Password',
-                color: Colors.deepPurple,
+                color: Colors.red,
                 enabled: true),
             const SizedBox(
               height: 20,

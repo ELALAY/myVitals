@@ -33,10 +33,12 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
           emailController.text.trim(),
           passwordController.text.trim(),
         );
+
+        User? user = authService.getCurrentUser();
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
+          MaterialPageRoute(builder: (context) => MyHomePage(user: user!)),
         );
       } on FirebaseAuthException catch (e) {
         String errorMessage;
@@ -123,10 +125,10 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
             ),
             const SizedBox(height: 40),
             //Email Field
-            MyEmailField(controller: emailController, label: 'Email', color: Colors.deepPurple, enabled: true),
+            MyEmailField(controller: emailController, label: 'Email', color: Colors.red, enabled: true),
             const SizedBox(height: 10),
             //Password Field
-            MyPwdField(controller: passwordController, label: 'Password', color: Colors.deepPurple, enabled: true),
+            MyPwdField(controller: passwordController, label: 'Password', color: Colors.red, enabled: true),
             const SizedBox(height: 20),
             MyButton(label: 'Log In', onTap: login),
             const SizedBox(height: 20),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myvitals/screens/home.dart';
 import 'package:myvitals/services/auth/auth_checker.dart';
 
 class GetStarted extends StatefulWidget {
@@ -86,7 +85,7 @@ class _GetStartedState extends State<GetStarted> {
   }
 
   void navHomeScreen() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
       return const AuthChecker(); // replace with your settings screen
     }));
   }

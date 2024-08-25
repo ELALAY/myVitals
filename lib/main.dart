@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:myvitals/screens/get_started.dart';
+import 'package:myvitals/screens/get_started_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

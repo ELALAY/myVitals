@@ -1,3 +1,5 @@
+enum Gender { male, female, other }
+
 class Person {
   String id;
   String username;
@@ -6,12 +8,15 @@ class Person {
   int age;
   double height;
   double weight;
+  Gender gender;
+  String contactNumber;
 
   Person(this.username, this.email, this.profilePicture, this.age, this.height,
-      this.weight)
+      this.weight, this.gender, this.contactNumber)
       : id = '';
+
   Person.withId(this.id, this.username, this.email, this.profilePicture,
-      this.age, this.height, this.weight);
+      this.age, this.height, this.weight, this.gender, this.contactNumber);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
@@ -22,6 +27,8 @@ class Person {
     map['age'] = age;
     map['height'] = height;
     map['weight'] = weight;
+    map['contactNumber'] = contactNumber;
+    map['gender'] = gender.toString().split('.').last; // Save as a string
 
     return map;
   }
@@ -32,9 +39,13 @@ class Person {
       map['username'],
       map['email'],
       map['profile_picture'],
-      map['age'],
-      map['height'],
-      map['weight'],
+      map['age'] ?? 0,
+      map['height'] ?? 0,
+      map['weight'] ?? 0,
+      Gender.values.firstWhere(
+          (e) => e.toString().split('.').last == map['gender'],
+          orElse: () => Gender.other), // Convert string back to enum
+      map['contactNumber']??'',
     );
   }
 }
