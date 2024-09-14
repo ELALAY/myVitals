@@ -55,11 +55,13 @@ class _NewVitalState extends State<NewVital> {
 
   void saveVital() async {
     try {
-      if (selectedCategory.isNotEmpty && vitalReadingController.text.isNotEmpty) {
+      if (selectedCategory.isNotEmpty &&
+          vitalReadingController.text.isNotEmpty) {
         VitalsModel vital = VitalsModel(
           selectedCategory,
           double.parse(vitalReadingController.text),
           widget.personProfile.id,
+          DateTime.now(),
         );
         await firebaseDB.recordNewVital(vital);
         showSuccessSnackBar('Vital reading saved successfully!');
