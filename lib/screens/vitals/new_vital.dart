@@ -17,7 +17,7 @@ class _NewVitalState extends State<NewVital> {
         foregroundColor: Colors.grey,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: [
             // choice of category of vital

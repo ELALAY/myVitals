@@ -42,7 +42,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void navCategoriesScreen() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CategoriesScreen(user: widget.user,)),
+      MaterialPageRoute(
+          builder: (context) => CategoriesScreen(
+                user: widget.user,
+                personProfile: widget.personProfile,
+              )),
     );
   }
 }

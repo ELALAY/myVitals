@@ -79,6 +79,12 @@ class FirebaseDB {
     }
   }
 
+  Future<void> updatePersonCategories(
+      String uid, List<String> categories) async {
+    await _firestore.collection('persons').doc(uid).update({
+      'categories': categories,
+    });
+  }
 //--------------------------------------------------------------------------------------
 //********  Vitals Functions**********/
 //--------------------------------------------------------------------------------------
@@ -128,7 +134,7 @@ class FirebaseDB {
   }
 
 //--------------------------------------------------------------------------------------
-//********  Vitals Functions**********/
+//********  Vital Categories Functions**********/
 //--------------------------------------------------------------------------------------
 
   // Record a user vital
@@ -175,7 +181,10 @@ class FirebaseDB {
   // edit user vital
   Future<void> updateUserVitalCategory(CategoryModel category) async {
     try {
-      _firestore.collection('categories').doc(category.id).update(category.toMap());
+      _firestore
+          .collection('categories')
+          .doc(category.id)
+          .update(category.toMap());
     } catch (e) {
       debugPrint('Error updating vital category');
     }
@@ -184,7 +193,31 @@ class FirebaseDB {
   // delete user vital
   Future<void> deleteUserVitalCategory(CategoryModel category) async {
     try {
-      _firestore.collection('categories').doc(category.id).delete();
+      WriteBatch batch = _firestore.batch();
+
+      // Delete the category from the categories collection
+      DocumentReference categoryRef =
+          _firestore.collection('categories').doc(category.id);
+      batch.delete(categoryRef);
+
+      // Find all users who have this category in their list
+      QuerySnapshot usersSnapshot = await _firestore
+          .collection('persons')
+          .where('categories', arrayContains: category.id)
+          .get();
+
+      for (DocumentSnapshot userDoc in usersSnapshot.docs) {
+        List<String> updatedCategories =
+            List<String>.from(userDoc['categories']);
+        updatedCategories
+            .remove(category.id); // Remove the deleted category from the list
+
+        // Update the user's document with the updated category list
+        batch.update(userDoc.reference, {'categories': updatedCategories});
+      }
+
+      // Commit the batch operation to delete the category and update users
+      await batch.commit();
     } catch (e) {
       debugPrint('Error deleting category');
     }

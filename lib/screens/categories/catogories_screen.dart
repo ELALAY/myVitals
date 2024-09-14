@@ -2,6 +2,7 @@ import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:myvitals/models/person_model.dart';
 import '../../Components/my_buttons/my_button.dart';
 import '../../Models/category_model.dart';
 import '../../services/realtime_db/firebase_db.dart';
@@ -10,7 +11,8 @@ import 'edit_category_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   final User user;
-  const CategoriesScreen({super.key, required this.user});
+  final Person personProfile;
+  const CategoriesScreen({super.key, required this.user, required this.personProfile});
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -35,7 +37,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   void fetchCategories() async {
-    List<CategoryModel> temp = await firebaseDatabasehelper.fetchAllVitalsCategories(widget.user.uid);
+    List<CategoryModel> temp =
+        await firebaseDatabasehelper.fetchAllVitalsCategories(widget.user.uid);
     setState(() {
       categories = temp;
     });
@@ -62,6 +65,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       itemCount: categories.length,
                       itemBuilder: (context, index) {
                         final category = categories[index];
+                        bool isActiveCategory = widget.personProfile.categories.contains(category.id);
                         return Slidable(
                             key: const ValueKey(0),
 
@@ -78,7 +82,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     editcategory(category);
                                     fetchCategories();
                                   },
-                                  backgroundColor: const Color.fromARGB(255, 192, 174, 174),
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 192, 174, 174),
                                   foregroundColor: Colors.white,
                                   icon: Icons.edit,
                                   label: 'Update',
@@ -99,16 +104,32 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     _showDeleteCategoryDialog(category);
                                     fetchCategories();
                                   },
-                                  backgroundColor:
-                                      Colors.red,
+                                  backgroundColor: Colors.red,
                                   foregroundColor: Colors.white,
                                   icon: Icons.delete_forever_outlined,
                                   label: 'Delete',
                                 ),
                               ],
                             ),
-                            child: ListTile(
-                              title: Text(category.name),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: SwitchListTile(
+                                title: Text(category.name),
+                                  activeColor: Colors.pink,
+                                  tileColor: Colors.grey.shade200,
+                                  value: isActiveCategory, // Show active/inactive based on user's categories
+                                  onChanged: (value) {
+                                setState(() {
+                                  if (value) {
+                                    widget.personProfile.categories.add(category.id); // Add category if activated
+                                  } else {
+                                    widget.personProfile.categories.remove(category.id); // Remove category if deactivated
+                                  }
+                                });
+                                // Update the person's categories in Firebase
+                                updateUserCategories();
+                              },
+                            ),
                             ));
                       }),
                 ),
@@ -116,10 +137,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: _createCategory,
-        backgroundColor: Colors.deepPurple,
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.pink,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
+  }
+
+  void updateUserCategories() async {
+    try {
+      // Update user's category list in Firestore
+      await firebaseDatabasehelper.updatePersonCategories(widget.user.uid, widget.personProfile.categories);
+      showSuccessSnachBar('Categories updated!');
+    } catch (e) {
+      showErrorSnachBar('Error updating categories!');
+    }
   }
 
   void _showDeleteCategoryDialog(CategoryModel category) {
@@ -148,11 +182,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   void editcategory(CategoryModel catergory) async {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EditCategory(category: catergory,); // replace with your settings screen
+      return EditCategory(
+        category: catergory,
+      ); // replace with your settings screen
     })).then((value) => reload());
   }
 
-  // ignore: unused_element
   void _createCategory() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return const CreateCategory(); // replace with your settings screen
