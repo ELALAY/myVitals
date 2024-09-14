@@ -9,16 +9,16 @@ import '../models/person.dart';
 import '../components/my_textfields/my_numberfield.dart';
 import '../components/my_textfields/my_textfield.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileInformationScreen extends StatefulWidget {
   final User user;
   final Person person;
-  const ProfileScreen({super.key, required this.user, required this.person});
+  const ProfileInformationScreen({super.key, required this.user, required this.person});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileInformationScreen> createState() => _ProfileInformationScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController ageController = TextEditingController();

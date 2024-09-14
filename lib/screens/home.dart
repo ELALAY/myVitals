@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:myvitals/Components/my_drawer.dart';
-import 'package:myvitals/Components/myvital_card.dart';
 import 'package:myvitals/screens/onboarding/onboarding_screen.dart';
-import 'package:myvitals/screens/profile_screen.dart';
+import 'package:myvitals/screens/profile_information_screen.dart';
+import '../Components/myvital_card.dart';
 import '../models/person.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/login_register_screen.dart';
 import '../services/realtime_db/firebase_db.dart';
+import 'Profile/profile_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -29,8 +30,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    super.initState();
     fetchUser();
+    super.initState();
   }
 
   void fetchUser() async {
@@ -102,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
             MaterialPageRoute(
               builder: (context) => ProfileScreen(
                 user: user!,
-                person: personProfile!,
+                personProfile: personProfile!,
               ),
             ),
           );

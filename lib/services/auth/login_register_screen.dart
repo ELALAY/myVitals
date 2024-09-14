@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myvitals/screens/home.dart';
 import 'package:myvitals/services/auth/register_screen.dart';
 import '../../Components/my_buttons/my_button.dart';
 import '../../Components/my_textfields/my_emailfield.dart';
@@ -37,7 +36,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
         );
       } on FirebaseAuthException catch (e) {
         String errorMessage;
@@ -111,7 +110,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,  
           children: [
             const Icon(
               Icons.lock_open_rounded,

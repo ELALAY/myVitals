@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Components/my_textfields/my_numberfield.dart';
 import 'package:myvitals/screens/home.dart';
-import '../models/person.dart';
+import '../../models/person.dart';
 
 class PatientInfoScreen extends StatefulWidget {
   final User user;

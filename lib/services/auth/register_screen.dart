@@ -11,7 +11,7 @@ import '../../Components/my_textfields/my_emailfield.dart';
 import '../../Components/my_textfields/my_pwdfield.dart';
 import '../../Components/my_textfields/my_textfield.dart';
 import '../../models/person.dart';
-import '../../screens/patient_info_screen.dart';
+import '../../screens/Profile/patient_info_screen.dart';
 import '../realtime_db/firebase_db.dart';
 import 'auth_service.dart';
 import 'login_register_screen.dart';
