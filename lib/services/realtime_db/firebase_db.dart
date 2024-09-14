@@ -85,12 +85,25 @@ class FirebaseDB {
       'categories': categories,
     });
   }
+
+  // edit user vital
+  Future<void> updateUserVitalCategory(CategoryModel category) async {
+    try {
+      _firestore
+          .collection('categories')
+          .doc(category.id)
+          .update(category.toMap());
+    } catch (e) {
+      debugPrint('Error updating vital category');
+    }
+  }
+
 //--------------------------------------------------------------------------------------
 //********  Vitals Functions**********/
 //--------------------------------------------------------------------------------------
 
   // Record a vital
-  Future<void> recordNewVital(Vitals vital) async {
+  Future<void> recordNewVital(VitalsModel vital) async {
     try {
       _firestore.collection('vitals').add(vital.toMap());
     } catch (e) {
@@ -99,14 +112,14 @@ class FirebaseDB {
   }
 
   // Read user vitals
-  Future<List<Vitals>> fetchUserVital(String uid) async {
+  Future<List<VitalsModel>> fetchUserVital(String uid) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('vitals')
           .where('user', isEqualTo: uid)
           .get();
-      List<Vitals> allVitals = querySnapshot.docs
-          .map((doc) => Vitals.fromMap(doc.data(), doc.id))
+      List<VitalsModel> allVitals = querySnapshot.docs
+          .map((doc) => VitalsModel.fromMap(doc.data(), doc.id))
           .toList();
       return allVitals;
     } catch (e) {
@@ -116,7 +129,7 @@ class FirebaseDB {
   }
 
   // edit user vital
-  Future<void> updateUserVital(Vitals vital) async {
+  Future<void> updateUserVital(VitalsModel vital) async {
     try {
       _firestore.collection('vitals').doc(vital.id).update(vital.toMap());
     } catch (e) {
@@ -125,7 +138,7 @@ class FirebaseDB {
   }
 
   // delete user vital
-  Future<void> deleteUserVital(Vitals vital) async {
+  Future<void> deleteUserVital(VitalsModel vital) async {
     try {
       _firestore.collection('vitals').doc(vital.id).delete();
     } catch (e) {
@@ -146,23 +159,6 @@ class FirebaseDB {
     }
   }
 
-  // Read user vital categories
-  Future<List<CategoryModel>> fetchUserVitalsCategories(String uid) async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection('categories')
-          .where('user', isEqualTo: uid)
-          .get();
-      List<CategoryModel> allCategories = querySnapshot.docs
-          .map((doc) => CategoryModel.fromMap(doc.data(), doc.id))
-          .toList();
-      return allCategories;
-    } catch (e) {
-      debugPrint('Error fetching user categories: $e');
-      return [];
-    }
-  }
-
   // Read all vital categories
   Future<List<CategoryModel>> fetchAllVitalsCategories(String uid) async {
     try {
@@ -178,15 +174,21 @@ class FirebaseDB {
     }
   }
 
-  // edit user vital
-  Future<void> updateUserVitalCategory(CategoryModel category) async {
+  // fetch category by ID
+  Future<CategoryModel?> fetchCategoryById(String categoryId) async {
     try {
-      _firestore
-          .collection('categories')
-          .doc(category.id)
-          .update(category.toMap());
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await _firestore.collection('categories').doc(categoryId).get();
+
+      if (docSnapshot.exists && docSnapshot.data() != null) {
+        // Return a single CategoryModel
+        return CategoryModel.fromMap(docSnapshot.data()!, docSnapshot.id);
+      } else {
+        return null; // Return null if the document does not exist
+      }
     } catch (e) {
-      debugPrint('Error updating vital category');
+      debugPrint('Error fetching category: $e');
+      return null;
     }
   }
 

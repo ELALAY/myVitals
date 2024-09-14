@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:myvitals/screens/vitals/new_vital.dart';
 // import 'package:myvitals/Components/my_drawer.dart';
 import '../Components/myvital_card.dart';
 import '../models/person_model.dart';
@@ -157,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: navNewVital,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: GNav(
@@ -187,5 +188,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  void navNewVital() {
+    if (personProfile != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NewVital(
+            personProfile: personProfile!,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -30,102 +30,104 @@ class _CreateCategoryState extends State<CreateCategory> {
         elevation: 0.0,
         foregroundColor: Colors.grey,
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          const Icon(
-            Icons.category_outlined,
-            size: 100,
-            color: Colors.pink,
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          // Category Name
-          SizedBox(
-            width: 365.0,
-            child: MyTextField(
-                controller: newCategoryController,
-                label: 'Category Name',
-                color: Colors.deepPurple,
-                enabled: true),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          // Category Min Value
-          SizedBox(
-            width: 365.0,
-            child: MyNumberField(
-                controller: minValueController,
-                label: 'Min Value',
-                color: Colors.deepPurple,
-                enabled: true),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          // Category Max Value
-          SizedBox(
-            width: 365.0,
-            child: MyNumberField(
-                controller: maxValueController,
-                label: 'Max Value',
-                color: Colors.deepPurple,
-                enabled: true),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          // Container(
-          //   height: 300.0,
-          //   width: 350.0,
-          //   decoration: BoxDecoration(
-          //     color: Colors.grey.shade100,
-          //     borderRadius: BorderRadius.circular(12.0),
-          //     border: Border.all(color: Colors.deepPurple),
-          //   ),
-          //   child: GridView.builder(
-          //     shrinkWrap: true,
-          //     itemCount: iconNames.length,
-          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //       crossAxisCount: 4,
-          //       crossAxisSpacing: 10.0,
-          //       mainAxisSpacing: 10.0,
-          //     ),
-          //     itemBuilder: (context, index) {
-          //       String iconName = iconNames[index];
-          //       return GestureDetector(
-          //         onTap: () {
-          //           setState(() {
-          //             _selectedIcon = iconName;
-          //           });
-          //         },
-          //         child: Container(
-          //           decoration: BoxDecoration(
-          //             border: Border.all(
-          //               color: _selectedIcon == iconName
-          //                   ? Colors.blue
-          //                   : Colors.transparent,
-          //               width: 2,
-          //             ),
-          //             borderRadius: BorderRadius.circular(8),
-          //           ),
-          //           child: Image.asset(
-          //             'lib/Images/$iconName.png',
-          //             height: 35,
-          //             width: 35,
-          //           ),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-          MyButton(label: 'save', onTap: saveCategory),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            const Icon(
+              Icons.category_outlined,
+              size: 100,
+              color: Colors.pink,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            // Category Name
+            SizedBox(
+              width: 365.0,
+              child: MyTextField(
+                  controller: newCategoryController,
+                  label: 'Category Name',
+                  color: Colors.deepPurple,
+                  enabled: true),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            // Category Min Value
+            SizedBox(
+              width: 365.0,
+              child: MyNumberField(
+                  controller: minValueController,
+                  label: 'Min Value',
+                  color: Colors.deepPurple,
+                  enabled: true),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            // Category Max Value
+            SizedBox(
+              width: 365.0,
+              child: MyNumberField(
+                  controller: maxValueController,
+                  label: 'Max Value',
+                  color: Colors.deepPurple,
+                  enabled: true),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            // Container(
+            //   height: 300.0,
+            //   width: 350.0,
+            //   decoration: BoxDecoration(
+            //     color: Colors.grey.shade100,
+            //     borderRadius: BorderRadius.circular(12.0),
+            //     border: Border.all(color: Colors.deepPurple),
+            //   ),
+            //   child: GridView.builder(
+            //     shrinkWrap: true,
+            //     itemCount: iconNames.length,
+            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 4,
+            //       crossAxisSpacing: 10.0,
+            //       mainAxisSpacing: 10.0,
+            //     ),
+            //     itemBuilder: (context, index) {
+            //       String iconName = iconNames[index];
+            //       return GestureDetector(
+            //         onTap: () {
+            //           setState(() {
+            //             _selectedIcon = iconName;
+            //           });
+            //         },
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             border: Border.all(
+            //               color: _selectedIcon == iconName
+            //                   ? Colors.blue
+            //                   : Colors.transparent,
+            //               width: 2,
+            //             ),
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           child: Image.asset(
+            //             'lib/Images/$iconName.png',
+            //             height: 35,
+            //             width: 35,
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            MyButton(label: 'save', onTap: saveCategory),
+          ],
+        ),
       ),
     );
   }
