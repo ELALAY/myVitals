@@ -1,5 +1,6 @@
 import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:myvitals/Components/my_textfields/my_numberfield.dart';
 
 import '../../Components/my_buttons/my_button.dart';
 import '../../Components/my_textfields/my_textfield.dart';
@@ -16,6 +17,8 @@ class CreateCategory extends StatefulWidget {
 class _CreateCategoryState extends State<CreateCategory> {
   FirebaseDB firebaseDatabasehelper = FirebaseDB();
   final TextEditingController newCategoryController = TextEditingController();
+  final TextEditingController minValueController = TextEditingController();
+  final TextEditingController maxValueController = TextEditingController();
   // String _selectedIcon = 'app_icon';
 
   @override
@@ -30,9 +33,18 @@ class _CreateCategoryState extends State<CreateCategory> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 30,),
-          const Icon(Icons.category_outlined, size: 100, color: Colors.pink,),
-          const SizedBox(height: 30,),
+          const SizedBox(
+            height: 30,
+          ),
+          const Icon(
+            Icons.category_outlined,
+            size: 100,
+            color: Colors.pink,
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          // Category Name
           SizedBox(
             width: 365.0,
             child: MyTextField(
@@ -41,7 +53,33 @@ class _CreateCategoryState extends State<CreateCategory> {
                 color: Colors.deepPurple,
                 enabled: true),
           ),
-          const SizedBox(height: 30,),
+          const SizedBox(
+            height: 12,
+          ),
+          // Category Min Value
+          SizedBox(
+            width: 365.0,
+            child: MyNumberField(
+                controller: minValueController,
+                label: 'Min Value',
+                color: Colors.deepPurple,
+                enabled: true),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          // Category Max Value
+          SizedBox(
+            width: 365.0,
+            child: MyNumberField(
+                controller: maxValueController,
+                label: 'Max Value',
+                color: Colors.deepPurple,
+                enabled: true),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
           // Container(
           //   height: 300.0,
           //   width: 350.0,
@@ -94,20 +132,25 @@ class _CreateCategoryState extends State<CreateCategory> {
 
   Future<void> saveCategory() async {
     try {
-      if (newCategoryController.text.isNotEmpty) {
-        CategoryModel category =
-            CategoryModel(name: newCategoryController.text);//, iconName: _selectedIcon);
+      if (newCategoryController.text.isNotEmpty &&
+          maxValueController.text.isNotEmpty &&
+          minValueController.text.isNotEmpty) {
+        CategoryModel category = CategoryModel(
+            name: newCategoryController.text,
+            minValue: double.parse(minValueController.text),
+            maxValue: double.parse(
+                maxValueController.text)); //, iconName: _selectedIcon);
         await firebaseDatabasehelper.newVitalCategory(category);
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
-        showInfoSnachBar('Name should be filled!');
+        showInfoSnachBar('all fields should be filled!');
       }
     } catch (e) {
       showErrorSnachBar('Error creating category');
     }
   }
-  
+
   void showErrorSnachBar(String message) {
     awesomeTopSnackbar(context, message,
         iconWithDecoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../Components/my_buttons/my_button.dart';
+import '../../Components/my_textfields/my_numberfield.dart';
 import '../../Components/my_textfields/my_textfield.dart';
 import '../../Models/category_model.dart';
 import '../../services/realtime_db/firebase_db.dart';
@@ -17,14 +18,15 @@ class EditCategory extends StatefulWidget {
 class _EditCategoryState extends State<EditCategory> {
   FirebaseDB firebaseDatabasehelper = FirebaseDB();
   TextEditingController newCategoryController = TextEditingController();
+  final TextEditingController minValueController = TextEditingController();
+  final TextEditingController maxValueController = TextEditingController();
   // String _selectedIcon = 'app_icon';
 
   @override
   void initState() {
     super.initState();
     // Initialize with existing card details
-    newCategoryController =
-        TextEditingController(text: widget.category.name);
+    newCategoryController = TextEditingController(text: widget.category.name);
     // _selectedIcon = widget.category.iconName;
   }
 
@@ -40,6 +42,7 @@ class _EditCategoryState extends State<EditCategory> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Name of Category
           SizedBox(
             width: 365.0,
             child: MyTextField(
@@ -47,6 +50,33 @@ class _EditCategoryState extends State<EditCategory> {
                 label: 'Category Name',
                 color: Colors.deepPurple,
                 enabled: true),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          // Category Min Value
+          SizedBox(
+            width: 365.0,
+            child: MyNumberField(
+                controller: minValueController,
+                label: 'Min Value',
+                color: Colors.deepPurple,
+                enabled: true),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          // Category Max Value
+          SizedBox(
+            width: 365.0,
+            child: MyNumberField(
+                controller: maxValueController,
+                label: 'Max Value',
+                color: Colors.deepPurple,
+                enabled: true),
+          ),
+          const SizedBox(
+            height: 30,
           ),
           // Container(
           //   height: 300.0,
@@ -100,9 +130,15 @@ class _EditCategoryState extends State<EditCategory> {
 
   Future<void> saveCategory() async {
     try {
-      if (newCategoryController.text.isNotEmpty) {
-        CategoryModel category =
-            CategoryModel.withId(id: widget.category.id,name: newCategoryController.text);//, iconName: _selectedIcon);
+      if (newCategoryController.text.isNotEmpty &&
+          maxValueController.text.isNotEmpty &&
+          minValueController.text.isNotEmpty) {
+        CategoryModel category = CategoryModel.withId(
+            id: widget.category.id,
+            name: newCategoryController.text,
+            minValue: double.parse(minValueController.text),
+            maxValue: double.parse(
+                maxValueController.text)); //, iconName: _selectedIcon);
         await firebaseDatabasehelper.updateUserVitalCategory(category);
         showSuccessSnachBar('Category updated successfully!');
         // ignore: use_build_context_synchronously
