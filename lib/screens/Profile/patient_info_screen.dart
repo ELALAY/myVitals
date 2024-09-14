@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Components/my_textfields/my_numberfield.dart';
 import 'package:myvitals/screens/home.dart';
+import 'package:myvitals/services/realtime_db/firebase_db.dart';
 import '../../models/person_model.dart';
 
 class PatientInfoScreen extends StatefulWidget {
@@ -14,11 +15,13 @@ class PatientInfoScreen extends StatefulWidget {
 }
 
 class _PatientInfoScreenState extends State<PatientInfoScreen> {
+  FirebaseDB firebaseDB = FirebaseDB();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
   final TextEditingController contactNumberController = TextEditingController();
+  Person? personProfile;
 
   Gender? _selectedGender;
 
@@ -43,12 +46,18 @@ class _PatientInfoScreenState extends State<PatientInfoScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const MyHomePage(),
+          builder: (context) => MyHomePage(user: widget.user, personProfile: personProfile!,),
         ),
       );
     }).catchError((error) {
       debugPrint("Failed to update patient information: $error");
     });
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+    personProfile = await firebaseDB.getPersonProfile(widget.user.uid);
   }
 
   @override

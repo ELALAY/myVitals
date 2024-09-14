@@ -1,19 +1,39 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Screens/onboarding/onboarding_page_1.dart';
+import 'package:myvitals/models/person_model.dart';
+import 'package:myvitals/services/realtime_db/firebase_db.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../home.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  final User user;
+  const OnboardingScreen({super.key, required this.user});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  FirebaseDB firebaseDB = FirebaseDB();
   final PageController _controller = PageController();
   bool isLastScreen = false;
+  Person? personProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchprofile();
+  }
+
+  void fetchprofile() async {
+    try {
+      personProfile = await firebaseDB.getPersonProfile(widget.user.uid);
+    } catch (e) {
+      debugPrint('error fetching profile!');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +98,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return const MyHomePage();
+                            return MyHomePage(
+                              user: widget.user,
+                              personProfile: personProfile!,
+                            );
                           }));
                         },
                         child: const Text(

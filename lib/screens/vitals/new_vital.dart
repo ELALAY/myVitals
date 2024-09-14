@@ -164,13 +164,13 @@ class _NewVitalState extends State<NewVital> {
                       value: selectedCategory.isEmpty ? null : selectedCategory,
                       items: categories.map((category) {
                         return DropdownMenuItem(
-                          value: category.id,
+                          value: category.name,
                           child: Text(category.name),
                         );
                       }).toList(),
-                      onChanged: (newValue) {
+                      onChanged: (value) {
                         setState(() {
-                          selectedCategory = newValue!;
+                          selectedCategory = value!;
                         });
                       },
                     ),

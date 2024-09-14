@@ -196,7 +196,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   void navOnboardingScreen() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const OnboardingScreen();
+      return OnboardingScreen(user: widget.user,);
     }));
   }
 }

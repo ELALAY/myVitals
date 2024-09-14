@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myvitals/models/vital_model.dart';
 
 class MyVitalCard extends StatefulWidget {
-  final String vital;
-  final String level;
+  final VitalsModel vital;
   final Color color;
   const MyVitalCard(
       {super.key,
       required this.vital,
-      required this.level,
       required this.color});
 
   @override
@@ -30,11 +29,11 @@ class _MyVitalCardState extends State<MyVitalCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.vital.toString(),
+                widget.vital.vitalCategory,
                 style: const TextStyle(color: Colors.black),
               ),
               Text(
-                widget.level,
+                widget.vital.value.toString(),
                 style:
                     TextStyle(color: widget.color, fontWeight: FontWeight.bold),
               )

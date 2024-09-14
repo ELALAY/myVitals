@@ -123,7 +123,8 @@ class FirebaseDB {
           .toList();
       return allVitals;
     } catch (e) {
-      debugPrint('Error fetching user vitals: $e');
+      debugPrint('Error fetching user vitals for $uid: $e');
+
       return [];
     }
   }

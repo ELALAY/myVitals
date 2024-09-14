@@ -36,7 +36,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+          MaterialPageRoute(builder: (context) => OnboardingScreen(user: authService.getCurrentUser()!,)),
         );
       } on FirebaseAuthException catch (e) {
         String errorMessage;

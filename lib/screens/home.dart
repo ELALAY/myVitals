@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:myvitals/Models/category_model.dart';
+import 'package:myvitals/models/vital_model.dart';
 import 'package:myvitals/screens/vitals/new_vital.dart';
+import 'package:myvitals/screens/vitals/vitals_history.dart';
 // import 'package:myvitals/Components/my_drawer.dart';
 import '../Components/myvital_card.dart';
 import '../models/person_model.dart';
@@ -13,7 +16,10 @@ import 'Profile/profile_screen.dart';
 import 'onboarding/onboarding_screen.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final Person personProfile;
+  final User user;
+  const MyHomePage(
+      {super.key, required this.user, required this.personProfile});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -22,33 +28,56 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   FirebaseDB fbdatabaseHelper = FirebaseDB();
   AuthService authService = AuthService();
+  List<VitalsModel> vitals = [];
+  Map<String, CategoryModel> userCategories = {}; // Category ID => Category
   int _selectedIndex = 0;
   bool isLoading = true;
 
-  User? user;
-  Person? personProfile;
-
   @override
   void initState() {
-    fetchUser();
     super.initState();
+    fetchUserVitals();
+    fetchCategories();
+    isLoading = false;
   }
 
-  void fetchUser() async {
-    try {
-      User? userTemp = authService.getCurrentUser();
-      Person? person = await fbdatabaseHelper.getPersonProfile(userTemp!.uid);
+  void reload() {
+    isLoading = true;
+    fetchUserVitals();
+    fetchCategories();
+    isLoading = false;
+  }
 
+  void fetchUserVitals() async {
+    try {
+      List<VitalsModel> vitalsTemp =
+          await fbdatabaseHelper.fetchUserVital(widget.user.uid);
       setState(() {
-        user = userTemp;
-        personProfile = person;
-        isLoading = false; // Set loading to false after data is fetched
+        vitals = vitalsTemp;
+        debugPrint('user vitals: ${vitals.length.toString()}');
       });
     } catch (e) {
-      debugPrint('Error fetching user $e');
-      setState(() {
-        isLoading = false; // Set loading to false even if there's an error
-      });
+      debugPrint('Error fetching user vitals: $e');
+    }
+  }
+
+  void fetchCategories() async {
+    try {
+      Map<String, CategoryModel> catMap = {}; // Category ID => Category
+      for (String categoryId in widget.personProfile.categories) {
+        CategoryModel? cat =
+            await fbdatabaseHelper.fetchCategoryById(categoryId);
+        if (cat != null) {
+          catMap[categoryId] = cat; // Fixed: use categoryId as key
+        }
+
+        setState(() {
+          userCategories = catMap;
+          debugPrint('user categories: ${userCategories.length.toString()}');
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching categories: $e');
     }
   }
 
@@ -81,33 +110,37 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
     });
-
     // Navigate based on selected index
     switch (index) {
-      // case 1:
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => const HistoryScreen()),
-      //   );
-      //   break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyVitalsHistory(
+                    user: widget.user,
+                    personProfile: widget.personProfile,
+                  )),
+        );
+        break;
       case 2:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+          MaterialPageRoute(
+              builder: (context) => OnboardingScreen(
+                    user: widget.user,
+                  )),
         );
         break;
       case 3:
-        if (user != null && personProfile != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProfileScreen(
-                user: user!,
-                personProfile: personProfile!,
-              ),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfileScreen(
+              user: widget.user,
+              personProfile: widget.personProfile,
             ),
-          );
-        }
+          ),
+        );
         break;
       default:
         break;
@@ -123,38 +156,32 @@ class _MyHomePageState extends State<MyHomePage> {
         foregroundColor: Colors.grey,
         elevation: 0.0,
         actions: [
-          IconButton(onPressed: logout, icon: const Icon(Icons.logout_outlined))
+          IconButton(
+              onPressed: logout, icon: const Icon(Icons.logout_outlined)),
+          IconButton(
+              onPressed: reload, icon: const Icon(Icons.refresh_outlined)),
         ],
       ),
-      //  drawer: MyDrawer(user: user!, personProfile: personProfile!),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : const Column(
+          : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                // Blood Sugar
-                MyVitalCard(
-                  vital: 'Blood Sugar',
-                  level: '0.97g',
-                  color: Colors.tealAccent,
-                ),
-                // Cortisol
-                MyVitalCard(
-                  vital: 'Cortisol',
-                  level: '2g',
-                  color: Colors.amber,
-                ),
-                // Temperature
-                MyVitalCard(
-                  vital: 'Temperature',
-                  level: '38',
-                  color: Colors.red,
-                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: vitals.length,
+                      itemBuilder: (context, index) {
+                        VitalsModel vital = vitals[index];
+                        return MyVitalCard(
+                            vital: vital,
+                            color: Colors.green);
+                      }),
+                )
               ],
             ),
       floatingActionButton: FloatingActionButton(
@@ -191,15 +218,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void navNewVital() {
-    if (personProfile != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NewVital(
-            personProfile: personProfile!,
-          ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewVital(
+          personProfile: widget.personProfile,
         ),
-      );
-    }
+      ),
+    );
   }
 }
