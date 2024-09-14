@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:myvitals/Components/my_drawer.dart';
 import 'package:myvitals/Components/myvital_card.dart';
+import 'package:myvitals/screens/onboarding/onboarding_screen.dart';
 import 'package:myvitals/screens/profile_screen.dart';
 import '../models/person.dart';
 import '../services/auth/auth_service.dart';
@@ -87,12 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
       //     MaterialPageRoute(builder: (context) => const HistoryScreen()),
       //   );
       //   break;
-      // case 2:
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => const InsightsScreen()),
-      //   );
-      //   break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        );
+        break;
       case 3:
         if (user != null && personProfile != null) {
           Navigator.push(
@@ -122,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(onPressed: logout, icon: const Icon(Icons.logout_outlined))
         ],
       ),
+      //  drawer: MyDrawer(user: user!, personProfile: personProfile!),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -129,16 +132,19 @@ class _MyHomePageState extends State<MyHomePage> {
           : const Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Blood Sugar
                 MyVitalCard(
                   vital: 'Blood Sugar',
                   level: '0.97g',
                   color: Colors.tealAccent,
                 ),
+                // Cortisol
                 MyVitalCard(
                   vital: 'Cortisol',
                   level: '2g',
                   color: Colors.amber,
                 ),
+                // Temperature
                 MyVitalCard(
                   vital: 'Temperature',
                   level: '38',

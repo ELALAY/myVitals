@@ -4,18 +4,18 @@ class Person {
   String id;
   String username;
   String email;
-  String profilePicture;
+  String profile_picture;
   int age;
   double height;
   double weight;
   Gender gender;
   String contactNumber;
 
-  Person(this.username, this.email, this.profilePicture, this.age, this.height,
+  Person(this.username, this.email, this.profile_picture, this.age, this.height,
       this.weight, this.gender, this.contactNumber)
       : id = '';
 
-  Person.withId(this.id, this.username, this.email, this.profilePicture,
+  Person.withId(this.id, this.username, this.email, this.profile_picture,
       this.age, this.height, this.weight, this.gender, this.contactNumber);
 
   Map<String, dynamic> toMap() {
@@ -23,7 +23,7 @@ class Person {
     map['id'] = id;
     map['username'] = username;
     map['email'] = email;
-    map['profile_picture'] = profilePicture;
+    map['profile_picture'] = profile_picture;
     map['age'] = age;
     map['height'] = height;
     map['weight'] = weight;

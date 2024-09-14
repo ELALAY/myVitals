@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myvitals/screens/home.dart';
 import 'package:myvitals/services/auth/register_screen.dart';
 import '../../Components/my_buttons/my_button.dart';
 import '../../Components/my_textfields/my_emailfield.dart';
 import '../../Components/my_textfields/my_pwdfield.dart';
-import '../../Screens/home.dart';
+import '../../screens/onboarding/onboarding_screen.dart';
 import 'auth_service.dart';
 
 class LoginOrRegister extends StatefulWidget {
@@ -106,7 +107,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      backgroundColor: Colors.amber,
+      // backgroundColor: Colors.amber,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

@@ -10,6 +10,7 @@ class FirebaseDB {
 //********  Person Functions**********/
 //--------------------------------------------------------------------------------------
 
+  // get person profile by ID
   Future<Person?> getPersonProfile(String uid) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
@@ -27,6 +28,7 @@ class FirebaseDB {
     }
   }
 
+  // get person profile by username
   Future<Person?> getPersonProfileByUsername(String username) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
@@ -48,6 +50,7 @@ class FirebaseDB {
     }
   }
 
+  //get all persons on the app
   Future<List<Person>> getAllPersons() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -62,10 +65,11 @@ class FirebaseDB {
     }
   }
 
+  // update person profile by user ID
   Future<void> updatePersonProfile(
       String userId, Map<String, dynamic> updatedData) async {
     try {
-      await _firestore.collection('users').doc(userId).update(updatedData);
+      await _firestore.collection('persons').doc(userId).update(updatedData);
       debugPrint('Profile updated successfully.');
     } catch (e) {
       debugPrint('Failed to update profile: $e');

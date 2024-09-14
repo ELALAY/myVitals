@@ -4,7 +4,11 @@ class MyVitalCard extends StatefulWidget {
   final String vital;
   final String level;
   final Color color;
-  const MyVitalCard({super.key, required this.vital, required this.level, required this.color});
+  const MyVitalCard(
+      {super.key,
+      required this.vital,
+      required this.level,
+      required this.color});
 
   @override
   State<MyVitalCard> createState() => _MyVitalCardState();
@@ -19,7 +23,7 @@ class _MyVitalCardState extends State<MyVitalCard> {
         height: 80.0,
         width: 400.0,
         decoration: BoxDecoration(
-            color: Colors.blueGrey, borderRadius: BorderRadius.circular(12.0)),
+            color: Colors.pink.shade200, borderRadius: BorderRadius.circular(12.0)),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
