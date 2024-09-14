@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myvitals/Models/category_model.dart';
 import 'package:myvitals/models/vital_model.dart';
 
 import '../../models/person_model.dart';
@@ -123,6 +124,69 @@ class FirebaseDB {
       _firestore.collection('vitals').doc(vital.id).delete();
     } catch (e) {
       debugPrint('Error deleting vital');
+    }
+  }
+
+//--------------------------------------------------------------------------------------
+//********  Vitals Functions**********/
+//--------------------------------------------------------------------------------------
+
+  // Record a user vital
+  Future<void> newVitalCategory(CategoryModel category) async {
+    try {
+      _firestore.collection('categories').add(category.toMap());
+    } catch (e) {
+      debugPrint('Error adding category');
+    }
+  }
+
+  // Read user vital categories
+  Future<List<CategoryModel>> fetchUserVitalsCategories(String uid) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('categories')
+          .where('user', isEqualTo: uid)
+          .get();
+      List<CategoryModel> allCategories = querySnapshot.docs
+          .map((doc) => CategoryModel.fromMap(doc.data(), doc.id))
+          .toList();
+      return allCategories;
+    } catch (e) {
+      debugPrint('Error fetching user categories: $e');
+      return [];
+    }
+  }
+
+  // Read all vital categories
+  Future<List<CategoryModel>> fetchAllVitalsCategories(String uid) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await _firestore.collection('categories').get();
+      List<CategoryModel> allCategories = querySnapshot.docs
+          .map((doc) => CategoryModel.fromMap(doc.data(), doc.id))
+          .toList();
+      return allCategories;
+    } catch (e) {
+      debugPrint('Error fetching user vitals: $e');
+      return [];
+    }
+  }
+
+  // edit user vital
+  Future<void> updateUserVitalCategory(CategoryModel category) async {
+    try {
+      _firestore.collection('categories').doc(category.id).update(category.toMap());
+    } catch (e) {
+      debugPrint('Error updating vital category');
+    }
+  }
+
+  // delete user vital
+  Future<void> deleteUserVitalCategory(CategoryModel category) async {
+    try {
+      _firestore.collection('categories').doc(category.id).delete();
+    } catch (e) {
+      debugPrint('Error deleting category');
     }
   }
 }

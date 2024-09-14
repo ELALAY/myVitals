@@ -154,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
+      floatingActionButton: FloatingActionButton(onPressed: (){}, child: const Icon(Icons.add),),
       bottomNavigationBar: GNav(
         selectedIndex: _selectedIndex,
         onTabChange: _onTabSelected,
