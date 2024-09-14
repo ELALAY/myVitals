@@ -16,7 +16,7 @@ class _MyButtonState extends State<MyButton> {
       child: ElevatedButton(
         onPressed: widget.onTap, // Disable button if card or category is not selected
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.pink,
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
         ),
         child: Text(widget.label),

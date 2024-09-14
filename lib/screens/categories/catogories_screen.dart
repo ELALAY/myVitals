@@ -2,8 +2,10 @@ import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../../Components/my_buttons/my_button.dart';
 import '../../Models/category_model.dart';
 import '../../services/realtime_db/firebase_db.dart';
+import 'create_category_screen.dart';
 import 'edit_category_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -107,19 +109,16 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             ),
                             child: ListTile(
                               title: Text(category.name),
-                              leading: SizedBox(
-                                  height: 35.0,
-                                  child: categoryIcon(category.iconName)),
                             ));
                       }),
                 ),
               ],
             ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _createCategory,
-      //   backgroundColor: Colors.deepPurple,
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _createCategory,
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -162,7 +161,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   void deleteCategory(CategoryModel category) async {
     try {
-      firebaseDatabasehelper.deleteCategory(category);
+      firebaseDatabasehelper.deleteUserVitalCategory(category);
       setState(() {
         fetchCategories(); // Reload categories
       });

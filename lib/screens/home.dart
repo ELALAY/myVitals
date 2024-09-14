@@ -133,7 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
           : const Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 // Blood Sugar
                 MyVitalCard(
                   vital: 'Blood Sugar',
@@ -154,7 +156,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-      floatingActionButton: FloatingActionButton(onPressed: (){}, child: const Icon(Icons.add),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: GNav(
         selectedIndex: _selectedIndex,
         onTabChange: _onTabSelected,

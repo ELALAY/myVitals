@@ -17,6 +17,19 @@ class _NewVitalState extends State<NewVital> {
         foregroundColor: Colors.grey,
         elevation: 0,
       ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // choice of category of vital
+
+            // value
+
+            // show max and min value of the vategory
+
+            // 
+          ],
+        ),
+      ),
     );
   }
 }

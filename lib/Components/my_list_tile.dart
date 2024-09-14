@@ -20,8 +20,9 @@ class _MyListTileState extends State<MyListTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(8.0),
       child: ListTile(
+        tileColor: Colors.grey.shade200,
         leading: Text(
           widget.tileTitle,
           style: const TextStyle(fontWeight: FontWeight.bold),

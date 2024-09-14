@@ -16,7 +16,7 @@ class CreateCategory extends StatefulWidget {
 class _CreateCategoryState extends State<CreateCategory> {
   FirebaseDB firebaseDatabasehelper = FirebaseDB();
   final TextEditingController newCategoryController = TextEditingController();
-  String _selectedIcon = 'app_icon';
+  // String _selectedIcon = 'app_icon';
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +30,9 @@ class _CreateCategoryState extends State<CreateCategory> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(height: 30,),
+          const Icon(Icons.category_outlined, size: 100, color: Colors.pink,),
+          const SizedBox(height: 30,),
           SizedBox(
             width: 365.0,
             child: MyTextField(
@@ -38,6 +41,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                 color: Colors.deepPurple,
                 enabled: true),
           ),
+          const SizedBox(height: 30,),
           // Container(
           //   height: 300.0,
           //   width: 350.0,
@@ -104,7 +108,6 @@ class _CreateCategoryState extends State<CreateCategory> {
     }
   }
   
-
   void showErrorSnachBar(String message) {
     awesomeTopSnackbar(context, message,
         iconWithDecoration: BoxDecoration(
