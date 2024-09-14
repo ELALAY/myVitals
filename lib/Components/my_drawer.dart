@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Screens/home.dart';
-import '../models/person.dart';
+import '../models/person_model.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/login_register_screen.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io'; // Add this import for File handling
 
-import '../models/person.dart';
+import '../models/person_model.dart';
 import '../components/my_textfields/my_numberfield.dart';
 import '../components/my_textfields/my_textfield.dart';
 
@@ -64,8 +64,8 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   Future<void> _pickProfileImage() async {
     try {
-      final ImagePicker _picker = ImagePicker();
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      final ImagePicker picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         setState(() {
           _profileImage = File(pickedFile.path);

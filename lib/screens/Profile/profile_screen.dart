@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myvitals/models/person.dart';
+import 'package:myvitals/models/person_model.dart';
 
 class ProfileScreen extends StatefulWidget {
   final User user;
@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0.0,
         foregroundColor: Colors.grey,
         ),
-      body: Column(
+      body: const Column(
         children: [],
       ),
     );

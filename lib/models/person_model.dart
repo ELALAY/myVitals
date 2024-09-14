@@ -4,6 +4,7 @@ class Person {
   String id;
   String username;
   String email;
+  // ignore: non_constant_identifier_names
   String profile_picture;
   int age;
   double height;

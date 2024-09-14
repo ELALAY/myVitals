@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myvitals/models/vital_model.dart';
 
-import '../../models/person.dart';
+import '../../models/person_model.dart';
 
 class FirebaseDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -77,4 +78,51 @@ class FirebaseDB {
     }
   }
 
+//--------------------------------------------------------------------------------------
+//********  Vitals Functions**********/
+//--------------------------------------------------------------------------------------
+
+  // Record a vital
+  Future<void> recordNewVital(Vitals vital) async {
+    try {
+      _firestore.collection('vitals').add(vital.toMap());
+    } catch (e) {
+      debugPrint('Error adding vital');
+    }
+  }
+
+  // Read user vitals
+  Future<List<Vitals>> fetchUserVital(String uid) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('vitals')
+          .where('user', isEqualTo: uid)
+          .get();
+      List<Vitals> allVitals = querySnapshot.docs
+          .map((doc) => Vitals.fromMap(doc.data(), doc.id))
+          .toList();
+      return allVitals;
+    } catch (e) {
+      debugPrint('Error fetching user vitals: $e');
+      return [];
+    }
+  }
+
+  // edit user vital
+  Future<void> updateUserVital(Vitals vital) async {
+    try {
+      _firestore.collection('vitals').doc(vital.id).update(vital.toMap());
+    } catch (e) {
+      debugPrint('Error updating vital');
+    }
+  }
+
+  // delete user vital
+  Future<void> deleteUserVital(Vitals vital) async {
+    try {
+      _firestore.collection('vitals').doc(vital.id).delete();
+    } catch (e) {
+      debugPrint('Error deleting vital');
+    }
+  }
 }

@@ -2,15 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:myvitals/Components/my_drawer.dart';
-import 'package:myvitals/screens/onboarding/onboarding_screen.dart';
-import 'package:myvitals/screens/profile_information_screen.dart';
+// import 'package:myvitals/Components/my_drawer.dart';
 import '../Components/myvital_card.dart';
-import '../models/person.dart';
+import '../models/person_model.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/login_register_screen.dart';
 import '../services/realtime_db/firebase_db.dart';
 import 'Profile/profile_screen.dart';
+import 'onboarding/onboarding_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -119,7 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Vitals'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
         elevation: 0.0,
         actions: [
           IconButton(onPressed: logout, icon: const Icon(Icons.logout_outlined))
@@ -133,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
           : const Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 20,),
                 // Blood Sugar
                 MyVitalCard(
                   vital: 'Blood Sugar',
