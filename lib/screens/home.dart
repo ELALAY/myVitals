@@ -112,6 +112,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     // Navigate based on selected index
     switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyHomePage(
+                    user: widget.user,
+                    personProfile: widget.personProfile,
+                  )),
+        );
+        break;
       case 1:
         Navigator.push(
           context,
@@ -123,15 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
         );
         break;
       case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => OnboardingScreen(
-                    user: widget.user,
-                  )),
-        );
-        break;
-      case 3:
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -178,8 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       itemBuilder: (context, index) {
                         VitalsModel vital = vitals[index];
                         return MyVitalCard(
-                            vital: vital,
-                            color: Colors.green);
+                            id: vital.id,
+                            user: vital.user,
+                            vitalCategory: vital.vitalCategory,
+                            value: vital.value.toString(),
+                            date: vital.date,
+                            color: Colors.deepOrange);
                       }),
                 )
               ],
@@ -203,10 +208,6 @@ class _MyHomePageState extends State<MyHomePage> {
           GButton(
             icon: LineIcons.history,
             text: 'History',
-          ),
-          GButton(
-            icon: LineIcons.barChart,
-            text: 'Insights',
           ),
           GButton(
             icon: LineIcons.user,

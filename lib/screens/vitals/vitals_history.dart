@@ -77,13 +77,17 @@ class _MyVitalsHistoryState extends State<MyVitalsHistory> {
           children: [
             Expanded(
               child: ListView.builder(
-              itemCount: vitals.length,
-              itemBuilder: (context, index) {
-                VitalsModel vital = vitals[index];
-                return MyVitalCard(
-                    vital: vital,
-                    color: Colors.green);
-              }),
+                  itemCount: vitals.length,
+                  itemBuilder: (context, index) {
+                    VitalsModel vital = vitals[index];
+                    return MyVitalCard(
+                        id: vital.id,
+                        user: vital.user,
+                        vitalCategory: vital.vitalCategory,
+                        value: vital.value.toString(),
+                        date: vital.date,
+                        color: Color(vital.color));
+                  }),
             ),
           ],
         ));

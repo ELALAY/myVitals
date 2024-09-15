@@ -2,9 +2,12 @@ import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Components/my_buttons/my_button.dart';
 import 'package:myvitals/Components/my_textfields/my_numberfield.dart';
+import 'package:myvitals/Components/myvital_card.dart';
 import 'package:myvitals/models/person_model.dart';
 import 'package:myvitals/services/realtime_db/firebase_db.dart';
+import '../../Components/my_color_pallette.dart';
 import '../../Models/category_model.dart';
+import '../../Utils/globals.dart';
 import '../../models/vital_model.dart';
 
 class NewVital extends StatefulWidget {
@@ -21,6 +24,13 @@ class _NewVitalState extends State<NewVital> {
   List<CategoryModel> categories = [];
   String selectedCategory = '';
   bool isLoading = true;
+  Color selectedColor = Colors.deepPurple; //Default color
+
+  void _onColorSelected(Color color) {
+    setState(() {
+      selectedColor = color;
+    });
+  }
 
   @override
   void initState() {
@@ -62,6 +72,7 @@ class _NewVitalState extends State<NewVital> {
           double.parse(vitalReadingController.text),
           widget.personProfile.id,
           DateTime.now(),
+          selectedColor.value,
         );
         await firebaseDB.recordNewVital(vital);
         showSuccessSnackBar('Vital reading saved successfully!');
@@ -154,6 +165,14 @@ class _NewVitalState extends State<NewVital> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    // MyVitalCard(
+                    //     id: '',
+                    //     user: '',
+                    //     vitalCategory: 'Example',
+                    //     value: '1.7',
+                    //     date: DateTime.now(),
+                    //     color: selectedColor),
+                    // const SizedBox(height: 10),
                     // Choice of category of vital
                     DropdownButton<String>(
                       // dropdownColor: Colors.deepPurple,
@@ -182,6 +201,10 @@ class _NewVitalState extends State<NewVital> {
                       color: Colors.deepPurple,
                       enabled: true,
                     ),
+                    const SizedBox(height: 16.0),
+                    ColorPalette(
+                        colors: colorOptions,
+                        onColorSelected: _onColorSelected),
                     const SizedBox(height: 30),
                     MyButton(
                       label: 'Save',
