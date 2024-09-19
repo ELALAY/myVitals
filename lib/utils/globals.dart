@@ -4,7 +4,7 @@ bool darkTheme = false;
 
 //allowed colors
   final List<Color> colorOptions = [
-    Colors.red,
+    Colors.white,
     Colors.green,
     Colors.blue,
     Colors.blueGrey,

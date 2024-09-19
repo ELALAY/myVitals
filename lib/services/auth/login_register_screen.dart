@@ -34,10 +34,10 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
           passwordController.text.trim(),
         );
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => OnboardingScreen(user: authService.getCurrentUser()!,)),
-        );
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          return const OnboardingScreen();
+        }));
       } on FirebaseAuthException catch (e) {
         String errorMessage;
         switch (e.code) {
@@ -110,12 +110,11 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,  
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.lock_open_rounded,
-              size: 100,
-              color: Colors.deepPurple,
+            Image.asset(
+              'lib/images/login.gif',
+              scale: 0.50,
             ),
             const Text(
               'Personal Wallet Tracker',
@@ -123,10 +122,18 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
             ),
             const SizedBox(height: 40),
             //Email Field
-            MyEmailField(controller: emailController, label: 'Email', color: Colors.red, enabled: true),
+            MyEmailField(
+                controller: emailController,
+                label: 'Email',
+                color: Colors.red,
+                enabled: true),
             const SizedBox(height: 10),
             //Password Field
-            MyPwdField(controller: passwordController, label: 'Password', color: Colors.red, enabled: true),
+            MyPwdField(
+                controller: passwordController,
+                label: 'Password',
+                color: Colors.red,
+                enabled: true),
             const SizedBox(height: 20),
             MyButton(label: 'Log In', onTap: login),
             const SizedBox(height: 20),

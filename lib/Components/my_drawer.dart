@@ -189,14 +189,14 @@ class _MyDrawerState extends State<MyDrawer> {
   // }
 
   void navHomePage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
       return const MyHomePage();
     }));
   }
 
   void navOnboardingScreen() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return OnboardingScreen(user: widget.user,);
+      return const OnboardingScreen();
     }));
   }
 }

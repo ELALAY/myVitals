@@ -26,12 +26,12 @@ class VitalsModel {
   factory VitalsModel.fromMap(Map<String, dynamic> map, String id) {
     return VitalsModel.withId(
       id,
-      map['vitalCategory'],
+      map['vitalCategory'], 
       map['value'],
       map['user'],
       // Convert the stored date back into a DateTime object
       DateTime.parse(map['date']),
-      map['color'] ?? Colors.deepPurple.value, // Default color
+      map['color'] ?? Colors.white.value, // Default color
     );
   }
 }

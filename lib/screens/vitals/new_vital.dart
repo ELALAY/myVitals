@@ -2,7 +2,6 @@ import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Components/my_buttons/my_button.dart';
 import 'package:myvitals/Components/my_textfields/my_numberfield.dart';
-import 'package:myvitals/Components/myvital_card.dart';
 import 'package:myvitals/models/person_model.dart';
 import 'package:myvitals/services/realtime_db/firebase_db.dart';
 import '../../Components/my_color_pallette.dart';
@@ -24,7 +23,7 @@ class _NewVitalState extends State<NewVital> {
   List<CategoryModel> categories = [];
   String selectedCategory = '';
   bool isLoading = true;
-  Color selectedColor = Colors.deepPurple; //Default color
+  Color selectedColor = Colors.white; //Default color
 
   void _onColorSelected(Color color) {
     setState(() {

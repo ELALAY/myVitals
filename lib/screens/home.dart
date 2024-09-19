@@ -2,36 +2,34 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:myvitals/Components/my_drawer.dart';
 import 'package:myvitals/Models/category_model.dart';
 import 'package:myvitals/models/vital_model.dart';
 import 'package:myvitals/screens/vitals/new_vital.dart';
 import 'package:myvitals/screens/vitals/vitals_history.dart';
-// import 'package:myvitals/Components/my_drawer.dart';
 import '../Components/myvital_card.dart';
 import '../models/person_model.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/login_register_screen.dart';
 import '../services/realtime_db/firebase_db.dart';
 import 'Profile/profile_screen.dart';
-import 'onboarding/onboarding_screen.dart';
 
 class MyHomePage extends StatefulWidget {
-  final Person personProfile;
-  final User user;
-  const MyHomePage(
-      {super.key, required this.user, required this.personProfile});
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  FirebaseDB fbdatabaseHelper = FirebaseDB();
+  FirebaseDB firebaseDatabasehelper = FirebaseDB();
   AuthService authService = AuthService();
   List<VitalsModel> vitals = [];
   Map<String, CategoryModel> userCategories = {}; // Category ID => Category
   int _selectedIndex = 0;
   bool isLoading = true;
+  User? user;
+  Person? personProfile;
 
   @override
   void initState() {
@@ -50,8 +48,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void fetchUserVitals() async {
     try {
+      // Fetch the user
+      User? userTemp = authService.getCurrentUser();
+      if (userTemp != null) {
+        debugPrint('got user: ${userTemp.email}');
+        // Fetch user profile
+        Person? personProfileTemp =
+            await firebaseDatabasehelper.getPersonProfile(userTemp.uid);
+        personProfileTemp != null
+            ? debugPrint('got user: ${personProfileTemp.email}')
+            : debugPrint('no user profile');
+        setState(() {
+          user = userTemp;
+          personProfile = personProfileTemp;
+        });
+      }
+
       List<VitalsModel> vitalsTemp =
-          await fbdatabaseHelper.fetchUserVital(widget.user.uid);
+          await firebaseDatabasehelper.fetchUserVital(user!.uid);
       setState(() {
         vitals = vitalsTemp;
         debugPrint('user vitals: ${vitals.length.toString()}');
@@ -64,9 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void fetchCategories() async {
     try {
       Map<String, CategoryModel> catMap = {}; // Category ID => Category
-      for (String categoryId in widget.personProfile.categories) {
+      for (String categoryId in personProfile!.categories) {
         CategoryModel? cat =
-            await fbdatabaseHelper.fetchCategoryById(categoryId);
+            await firebaseDatabasehelper.fetchCategoryById(categoryId);
         if (cat != null) {
           catMap[categoryId] = cat; // Fixed: use categoryId as key
         }
@@ -115,11 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => MyHomePage(
-                    user: widget.user,
-                    personProfile: widget.personProfile,
-                  )),
+          MaterialPageRoute(builder: (context) => const MyHomePage()),
         );
         break;
       case 1:
@@ -127,8 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
           MaterialPageRoute(
               builder: (context) => MyVitalsHistory(
-                    user: widget.user,
-                    personProfile: widget.personProfile,
+                    user: user!,
+                    personProfile: personProfile!,
                   )),
         );
         break;
@@ -137,8 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
           MaterialPageRoute(
             builder: (context) => ProfileScreen(
-              user: widget.user,
-              personProfile: widget.personProfile,
+              user: user!,
+              personProfile: personProfile!,
             ),
           ),
         );
@@ -163,58 +173,49 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: reload, icon: const Icon(Icons.refresh_outlined)),
         ],
       ),
+      drawer: user != null && personProfile != null
+          ? MyDrawer(user: user!, personProfile: personProfile!)
+          : null,
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: vitals.length,
-                      itemBuilder: (context, index) {
-                        VitalsModel vital = vitals[index];
-                        return MyVitalCard(
-                            id: vital.id,
-                            user: vital.user,
-                            vitalCategory: vital.vitalCategory,
-                            value: vital.value.toString(),
-                            date: vital.date,
-                            color: Colors.deepOrange);
-                      }),
-                )
-              ],
-            ),
+          : SizedBox(
+            height: 500.0,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // Vitals
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: vitals.length,
+                        itemBuilder: (context, index) {
+                          VitalsModel vital = vitals[index];
+                          return MyVitalCard(
+                              id: vital.id,
+                              user: vital.user,
+                              vitalCategory: vital.vitalCategory,
+                              value: vital.value.toString(),
+                              date: vital.date,
+                              color: Color(vital.color));
+                        }),
+                  )
+                ],
+              ),
+          ),
       floatingActionButton: FloatingActionButton(
         onPressed: navNewVital,
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: GNav(
-        selectedIndex: _selectedIndex,
-        onTabChange: _onTabSelected,
-        activeColor: Colors.red,
-        gap: 12.0,
-        tabBackgroundColor: const Color.fromARGB(255, 230, 230, 230),
-        padding: const EdgeInsets.all(12.0),
-        tabs: const [
-          GButton(
-            icon: LineIcons.home,
-            text: 'Home',
-          ),
-          GButton(
-            icon: LineIcons.history,
-            text: 'History',
-          ),
-          GButton(
-            icon: LineIcons.user,
-            text: 'Profile',
-          )
-        ],
-      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.pink,
+        items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home_outlined, ), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.history, ), label: 'History'),
+      ]),
     );
   }
 
@@ -223,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => NewVital(
-          personProfile: widget.personProfile,
+          personProfile: personProfile!,
         ),
       ),
     );

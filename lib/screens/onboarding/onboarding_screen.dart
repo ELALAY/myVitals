@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Screens/onboarding/onboarding_page_1.dart';
 import 'package:myvitals/models/person_model.dart';
@@ -8,8 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../home.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  final User user;
-  const OnboardingScreen({super.key, required this.user});
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -24,15 +22,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
-    fetchprofile();
-  }
-
-  void fetchprofile() async {
-    try {
-      personProfile = await firebaseDB.getPersonProfile(widget.user.uid);
-    } catch (e) {
-      debugPrint('error fetching profile!');
-    }
   }
 
   @override
@@ -96,12 +85,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // Done => to home page
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(context,
+                          Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) {
-                            return MyHomePage(
-                              user: widget.user,
-                              personProfile: personProfile!,
-                            );
+                            return const MyHomePage();
                           }));
                         },
                         child: const Text(

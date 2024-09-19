@@ -30,7 +30,7 @@ class _MyVitalCardState extends State<MyVitalCard> {
         height: 80.0,
         width: 400.0,
         decoration: BoxDecoration(
-            color: Colors.pink, borderRadius: BorderRadius.circular(12.0)),
+            color: Colors.pink.shade500, borderRadius: BorderRadius.circular(12.0)),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(

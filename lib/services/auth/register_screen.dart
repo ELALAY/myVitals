@@ -70,23 +70,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
           .collection('persons')
           .doc(user!.uid)
           .set(personProfile.toMap());
+      
+      Person? userProfile = await fbdatabaseHelper.getPersonProfile(user!.uid);
 
       // Navigate to the PatientInfoScreen
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => PatientInfoScreen(user: user!,),
+          builder: (context) => PatientInfoScreen(user: user!, personProfile: userProfile!,),
         ),
       );
-
-      // ignore: use_build_context_synchronously
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => const MyHomePage(),
-      //   ),
-      // );
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myvitals/Components/my_list_tile.dart';
 import 'package:myvitals/models/person_model.dart';
+import 'package:myvitals/screens/Profile/profile_information.dart';
 
 import '../categories/catogories_screen.dart';
 
@@ -29,10 +30,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: MyListTile(
-                icon: const Icon(Icons.category_outlined),
-                tileTitle: 'Vital Categories',
-                onTap: navCategoriesScreen),
+            child: Column(
+              children: [
+                MyListTile(
+                    icon: const Icon(Icons.category_outlined),
+                    tileTitle: 'Vital Categories',
+                    onTap: navCategoriesScreen),
+                MyListTile(
+                    icon: const Icon(Icons.person_2_outlined),
+                    tileTitle: 'My Profile',
+                    onTap: navProfileScreen),
+              ],
+            ),
           ),
         ],
       ),
@@ -44,6 +53,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context,
       MaterialPageRoute(
           builder: (context) => CategoriesScreen(
+                user: widget.user,
+                personProfile: widget.personProfile,
+              )),
+    );
+  }
+
+  void navProfileScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ProfileInformation(
                 user: widget.user,
                 personProfile: widget.personProfile,
               )),
