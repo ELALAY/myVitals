@@ -1,19 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:myvitals/Components/my_drawer.dart';
 import 'package:myvitals/Models/category_model.dart';
 import 'package:myvitals/models/vital_model.dart';
 import 'package:myvitals/screens/vitals/new_vital.dart';
 import 'package:myvitals/screens/vitals/vitals_history.dart';
-import '../Components/myvital_card.dart';
 import '../models/person_model.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/login_register_screen.dart';
 import '../services/realtime_db/firebase_db.dart';
-import 'Profile/profile_screen.dart';
-
+                        
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -26,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
   AuthService authService = AuthService();
   List<VitalsModel> vitals = [];
   Map<String, CategoryModel> userCategories = {}; // Category ID => Category
-  int _selectedIndex = 0;
+  int _selectedBarIndex = 0;
   bool isLoading = true;
   User? user;
   Person? personProfile;
@@ -122,39 +118,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onTabSelected(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectedBarIndex = index;
     });
     // Navigate based on selected index
-    switch (index) {
-      case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
-        );
-        break;
-      case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyVitalsHistory(
-                    user: user!,
-                    personProfile: personProfile!,
-                  )),
-        );
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfileScreen(
-              user: user!,
-              personProfile: personProfile!,
-            ),
-          ),
-        );
-        break;
-      default:
-        break;
+    if (_selectedBarIndex == 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
+      );
+    } else if (_selectedBarIndex == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyVitalsHistory(
+                  user: user!,
+                  personProfile: personProfile!,
+                )),
+      );
     }
   }
 
@@ -180,42 +160,32 @@ class _MyHomePageState extends State<MyHomePage> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : SizedBox(
-            height: 500.0,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // Vitals
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: vitals.length,
-                        itemBuilder: (context, index) {
-                          VitalsModel vital = vitals[index];
-                          return MyVitalCard(
-                              id: vital.id,
-                              user: vital.user,
-                              vitalCategory: vital.vitalCategory,
-                              value: vital.value.toString(),
-                              date: vital.date,
-                              color: Color(vital.color));
-                        }),
-                  )
-                ],
-              ),
-          ),
+          : const SizedBox(
+              height: 500.0,
+              child: Text('Vitals'),
+              
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: navNewVital,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedBarIndex,
         selectedItemColor: Colors.pink,
         items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined, ), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.history, ), label: 'History'),
-      ]),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home_outlined,
+              ),
+              label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.history,
+              ),
+              label: 'History'),
+        ],
+        onTap: _onTabSelected,
+      ),
     );
   }
 

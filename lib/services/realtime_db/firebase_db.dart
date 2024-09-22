@@ -98,6 +98,24 @@ class FirebaseDB {
     }
   }
 
+  // Read user vitals by category
+  Future<List<VitalsModel>> fetchUserVitalsByCategory(String uid, String category) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('vitals')
+          .where('user', isEqualTo: uid)
+          .where('vitalCategory', isEqualTo: category)
+          .get();
+      List<VitalsModel> allVitals = querySnapshot.docs
+          .map((doc) => VitalsModel.fromMap(doc.data(), doc.id))
+          .toList();
+      return allVitals;
+    } catch (e) {
+      debugPrint('Error fetching user vitals for $uid: $e');
+
+      return [];
+    }
+  }
 //--------------------------------------------------------------------------------------
 //********  Vitals Functions**********/
 //--------------------------------------------------------------------------------------
